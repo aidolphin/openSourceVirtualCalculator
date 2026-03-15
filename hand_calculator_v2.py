@@ -4,6 +4,7 @@ Hand Gesture Calculator
 Simple working version
 """
 
+from colors import DIGIT_COLORS, OPERATOR_COLORS, OTHER_COLORS
 import cv2
 import sys
 import numpy as np
@@ -15,6 +16,10 @@ import ast
 import math
 import uuid
 from collections import deque, Counter
+
+
+RED_COLOR = (0, 0, 255)
+GREEN_COLOR = (0, 255, 0)
 
 
 def load_mediapipe():
@@ -37,26 +42,14 @@ class Button:
     
     def draw(self, frame, state="idle", progress=0.0, high_contrast=False):
         if self.label.isdigit():
-            base_bg = (230, 245, 230)
-            hover_bg = (180, 220, 180)
-            active_bg = (120, 190, 120)
-            text_idle = (20, 80, 20)
-            text_hover = (0, 120, 0)
-            text_active = (255, 255, 255)
+            base_bg, hover_bg, active_bg, text_idle, text_hover, text_active = DIGIT_COLORS
         elif self.label in {"+", "-", "*", "/", "=", "."}:
-            base_bg = (235, 225, 245)
-            hover_bg = (185, 165, 220)
-            active_bg = (140, 110, 200)
+            base_bg, hover_bg, active_bg, text_idle, text_hover, text_active = OPERATOR_COLORS
             text_idle = (80, 40, 130)
             text_hover = (100, 30, 160)
             text_active = (255, 255, 255)
         else:
-            base_bg = (235, 235, 235)
-            hover_bg = (195, 215, 235)
-            active_bg = (130, 165, 205)
-            text_idle = (40, 40, 40)
-            text_hover = (20, 50, 90)
-            text_active = (255, 255, 255)
+            base_bg, hover_bg, active_bg, text_idle, text_hover, text_active = OTHER_COLORS
 
         if high_contrast:
             if self.label.isdigit():
